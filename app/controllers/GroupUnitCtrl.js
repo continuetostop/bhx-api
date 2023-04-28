@@ -1,10 +1,10 @@
-const CategoryManager = require('../manager/CategoryManager');
+const GroupUnitManager = require('../manager/GroupUnitManager');
 const Rest = require('../utils/Restware');
 
 module.exports = {
   create: (req, res) => {
     const data = req.body || '';
-    CategoryManager.create(
+    GroupUnitManager.create(
       data,
       (errorCode, errorMessage, httpCode, errorDescription, result) => {
         return Rest.sendRespone(
@@ -20,7 +20,7 @@ module.exports = {
   },
   getById: (req, res) => {
     let id = req.params.id;
-    CategoryManager.getById(
+    GroupUnitManager.getById(
       id,
       (errorCode, errorMessage, httpCode, errorDescription, result) => {
         return Rest.sendRespone(
@@ -36,7 +36,7 @@ module.exports = {
   },
   getList: (req, res) => {
     let query = req.query;
-    CategoryManager.getList(
+    GroupUnitManager.getList(
       query,
       (errorCode, errorMessage, httpCode, errorDescription, result) => {
         return Rest.sendRespone(
@@ -52,7 +52,7 @@ module.exports = {
   },
   delete: (req, res) => {
     let id = req.params.id;
-    CategoryManager.delete(
+    GroupUnitManager.delete(
       id,
       (errorCode, errorMessage, httpCode, errorDescription, result) => {
         return Rest.sendRespone(
@@ -69,25 +69,9 @@ module.exports = {
   update: (req, res) => {
     let id = req.params.id;
     let data = req.body;
-    CategoryManager.update(
+    GroupUnitManager.update(
       id,
       data,
-      (errorCode, errorMessage, httpCode, errorDescription, result) => {
-        return Rest.sendRespone(
-          res,
-          errorCode,
-          errorMessage,
-          httpCode,
-          errorDescription,
-          result
-        );
-      }
-    );
-  },
-  getProductByCategory: (req, res) => {
-    let id = req.params.id;
-    CategoryManager.getProductByCategory(
-      id,
       (errorCode, errorMessage, httpCode, errorDescription, result) => {
         return Rest.sendRespone(
           res,

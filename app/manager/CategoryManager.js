@@ -132,4 +132,26 @@ module.exports = {
       );
     }
   },
+  getProductByCategory: async (id, callback) => {
+    let where = { id };
+    try {
+      let resultCategory = await Category.findByPk(id);
+      let resultProductByCategory = await resultCategory.getProducts();
+      return callback(
+        CODE_ERROR_STATUS.SUCCESS,
+        MESSEAGE.GET_LIST_SUCCESFULLY,
+        HTTP_STATUS.OK,
+        null,
+        resultProductByCategory
+      );
+    } catch (error) {
+      return callback(
+        CODE_ERROR_STATUS.ERROR,
+        MESSEAGE.GET_LIST_FAILED,
+        HTTP_STATUS.BAD_REQUEST,
+        error,
+        null
+      );
+    }
+  },
 };

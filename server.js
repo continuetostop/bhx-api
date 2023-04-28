@@ -41,6 +41,14 @@ app.use(Express.static(__dirname + '/public'));
 //   console.log(err);
 // }
 
+try {
+  MySequenlize.sync({ force: false }).then(() =>
+    console.log('Users data have been saved')
+  );
+} catch (err) {
+  console.log(err);
+}
+
 app.get('/', function (req, res) {
   // console.log('debug');
   res.send('Hello World');

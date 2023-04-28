@@ -1,31 +1,31 @@
 const Validator = require('validator');
 const Sequelize = require('sequelize');
-const Product = require('../models/ProductModel');
-const Category = require('../models/CategoryModel');
+
+const GroupUnit = require('../models/GroupUnitModel');
+const Unit = require('../models/UnitModel');
 const {
   CODE_ERROR_STATUS,
   MESSEAGE,
   HTTP_STATUS,
 } = require('../utils/Constant');
-const { query } = require('express');
 
 module.exports = {
   create: async (data, callback) => {
-    const { name, description, image, price } = data;
-    const productData = { name, description, image, price };
-    let resultCategory, resultProduct, result;
+    const { name, description, baseUnitId } = data;
+    const groupUnitData = { name, description };
+    let resultGroupUnit, resultUnit, result, groupUnitId;
     try {
-      resultCategory = await Category.findByPk(data.categoryId);
+      resultUnit = await Unit.findByPk(baseUnitId);
     } catch (error) {}
 
-    if (resultCategory?.id) {
+    if (resultUnit?.id) {
       try {
-        resultProduct = await Product.create(productData);
-        groupProductId = resultProduct.id;
+        resultGroupUnit = await GroupUnit.create(groupUnitData);
 
-        resultCategory.addProducts([groupProductId]);
-        result = { id: resultProduct.id };
+        groupUnitId = resultGroupUnit.id;
 
+        resultUnit.addGroup_units([groupUnitId]);
+        result = { id: resultGroupUnit.id };
         return callback(
           CODE_ERROR_STATUS.SUCCESS,
           MESSEAGE.CREATE_SUCCESFULLY,
@@ -45,15 +45,16 @@ module.exports = {
     }
   },
   getById: async (id, callback) => {
-    let resultProduct;
+    let resultGroupUnit;
     try {
-      resultProduct = await Product.findByPk(id);
+      resultGroupUnit = await GroupUnit.findByPk(id);
+
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
         MESSEAGE.GET_SUCCESFULLY,
         HTTP_STATUS.OK,
         null,
-        resultProduct
+        resultGroupUnit
       );
     } catch (error) {
       return callback(
@@ -68,14 +69,14 @@ module.exports = {
   getList: async (query, callback) => {
     let where = {};
     try {
-      let resultProduct = await Product.findAll({ where: where });
+      let resultGroupUnit = await GroupUnit.findAll({ where: where });
 
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
         MESSEAGE.GET_LIST_SUCCESFULLY,
         HTTP_STATUS.OK,
         null,
-        resultProduct
+        resultGroupUnit
       );
     } catch (error) {
       return callback(
@@ -89,9 +90,9 @@ module.exports = {
   },
   delete: async (id, callback) => {
     let where = { id };
-    let resultProduct;
+    let resultGroupUnit;
     try {
-      resultProduct = await Product.destroy({ where });
+      resultGroupUnit = await GroupUnit.destroy({ where });
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
         MESSEAGE.DELETE_SUCCESFULLY,
@@ -109,26 +110,22 @@ module.exports = {
       );
     }
   },
-  // chưa cập nhật mã danh mục phẩm
   update: async (id, data, callback) => {
-    const where = { id };
-    const { name, description, image, price } = data;
-    let productData = {};
-    if (name) {
-      productData.name = name;
+    const where = { id: id };
+    let groupUnitData = {};
+    let resultGroupUnit;
+    if (data.name) {
+      groupUnitData.name = data.name;
     }
-    if (description) {
-      productData.description = description;
+    if (data.description) {
+      groupUnitData.description = data.description;
     }
-    if (image) {
-      productData.image = image;
-    }
-    if (price) {
-      productData.price = price;
-    }
+    // if (data.baseUnitId) {
+    //   categoryData.baseUnitId = data.baseUnitId;
+    // }
     try {
-      let resultProduct = await Product.update(productData, { where: where });
-      let result = { id: resultProduct.id };
+      resultGroupUnit = await GroupUnit.update(groupUnitData, { where: where });
+      let result = { id: resultGroupUnit.id };
 
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
