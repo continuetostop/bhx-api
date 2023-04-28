@@ -2,6 +2,7 @@ const Validator = require('validator');
 const Sequelize = require('sequelize');
 const Product = require('../models/ProductModel');
 const Category = require('../models/CategoryModel');
+const GroupUnit = require('../models/GroupUnitModel');
 const {
   CODE_ERROR_STATUS,
   MESSEAGE,
@@ -11,11 +12,12 @@ const { query } = require('express');
 
 module.exports = {
   create: async (data, callback) => {
-    const { name, description, image, price } = data;
-    const productData = { name, description, image, price };
-    let resultCategory, resultProduct, result;
+    const { name, description, image } = data;
+    const productData = { name, description, image };
+    let resultCategory, resultGroupUnit, resultProduct, result;
     try {
       resultCategory = await Category.findByPk(data.categoryId);
+      resultGroupUnit = await GroupUnit.findByPk(data.groupUnitId);
     } catch (error) {}
 
     if (resultCategory?.id) {
@@ -24,6 +26,7 @@ module.exports = {
         groupProductId = resultProduct.id;
 
         resultCategory.addProducts([groupProductId]);
+        resultGroupUnit.addProducts([groupProductId]);
         result = { id: resultProduct.id };
 
         return callback(
@@ -112,7 +115,7 @@ module.exports = {
   // chưa cập nhật mã danh mục phẩm
   update: async (id, data, callback) => {
     const where = { id };
-    const { name, description, image, price } = data;
+    const { name, description, image } = data;
     let productData = {};
     if (name) {
       productData.name = name;
@@ -123,9 +126,7 @@ module.exports = {
     if (image) {
       productData.image = image;
     }
-    if (price) {
-      productData.price = price;
-    }
+
     try {
       let resultProduct = await Product.update(productData, { where: where });
       let result = { id: resultProduct.id };

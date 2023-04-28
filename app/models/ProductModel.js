@@ -19,10 +19,10 @@ let Product = MySequelize.define('products', {
     type: Sequelize.STRING(255),
     allowNull: true,
   },
-  price: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-  },
+  // price: {
+  //   type: Sequelize.INTEGER,
+  //   allowNull: false,
+  // },
 });
 
 module.exports = Product;

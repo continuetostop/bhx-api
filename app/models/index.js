@@ -11,6 +11,13 @@ Category.hasMany(Product, {
   onDelete: 'CASCADE',
 });
 
+Product.belongsTo(GroupUnit, {
+  onDelete: 'CASCADE',
+});
+GroupUnit.hasMany(Product, {
+  onDelete: 'CASCADE',
+});
+
 Unit.hasMany(GroupUnit, {
   foreignKey: 'baseUnitId',
   onDelete: 'CASCADE',
