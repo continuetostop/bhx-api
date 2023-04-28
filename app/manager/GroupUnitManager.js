@@ -144,4 +144,27 @@ module.exports = {
       );
     }
   },
+  getListUnitConversionByGroupUnit: async (id, callback) => {
+    try {
+      let resultListUnitConversionByGroupUnit, resultGroupUnit;
+      resultGroupUnit = await GroupUnit.findByPk(id);
+
+      resultListUnitConversionByGroupUnit = await resultGroupUnit.getUnits();
+      return callback(
+        CODE_ERROR_STATUS.SUCCESS,
+        MESSEAGE.GET_LIST_SUCCESFULLY,
+        HTTP_STATUS.OK,
+        null,
+        resultListUnitConversionByGroupUnit
+      );
+    } catch (error) {
+      return callback(
+        CODE_ERROR_STATUS.ERROR,
+        MESSEAGE.GET_LIST_FAILED,
+        HTTP_STATUS.BAD_REQUEST,
+        error,
+        null
+      );
+    }
+  },
 };

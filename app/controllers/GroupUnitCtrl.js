@@ -84,4 +84,20 @@ module.exports = {
       }
     );
   },
+  getListUnitConversionByGroupUnit: (req, res) => {
+    let id = req.params.id;
+    GroupUnitManager.getListUnitConversionByGroupUnit(
+      id,
+      (errorCode, errorMessage, httpCode, errorDescription, result) => {
+        return Rest.sendRespone(
+          res,
+          errorCode,
+          errorMessage,
+          httpCode,
+          errorDescription,
+          result
+        );
+      }
+    );
+  },
 };

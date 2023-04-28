@@ -6,4 +6,8 @@ module.exports = function (app) {
   app.get('/api/v1/group-units', GroupUnitCtrl.getList);
   app.delete('/api/v1/group-unit/:id', GroupUnitCtrl.delete);
   app.put('/api/v1/group-unit/:id', GroupUnitCtrl.update);
+  app.get(
+    '/api/v1/group-unit/:id/unit-conversion',
+    GroupUnitCtrl.getListUnitConversionByGroupUnit
+  );
 };
