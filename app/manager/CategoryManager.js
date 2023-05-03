@@ -5,7 +5,7 @@ const Category = require('../models/CategoryModel');
 const {
   HTTP_STATUS,
   CODE_ERROR_STATUS,
-  MESSEAGE,
+  MESSAGE,
 } = require('../utils/Constant');
 
 module.exports = {
@@ -19,7 +19,7 @@ module.exports = {
 
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
-        MESSEAGE.CREATE_SUCCESFULLY,
+        MESSAGE.CREATE_SUCCESSFULLY,
         HTTP_STATUS.CREATED,
         null,
         result
@@ -27,7 +27,7 @@ module.exports = {
     } catch (error) {
       return callback(
         CODE_ERROR_STATUS.ERROR,
-        MESSEAGE.CREATE_FAILED,
+        MESSAGE.CREATE_FAILED,
         HTTP_STATUS.BAD_REQUEST,
         error,
         null
@@ -40,7 +40,7 @@ module.exports = {
       resultCategory = await Category.findByPk(id);
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
-        MESSEAGE.GET_SUCCESFULLY,
+        MESSAGE.GET_SUCCESSFULLY,
         HTTP_STATUS.OK,
         null,
         resultCategory
@@ -48,7 +48,7 @@ module.exports = {
     } catch (error) {
       return callback(
         CODE_ERROR_STATUS.ERROR,
-        MESSEAGE.GET_FAILED,
+        MESSAGE.GET_FAILED,
         HTTP_STATUS.BAD_REQUEST,
         error,
         null
@@ -61,7 +61,7 @@ module.exports = {
       let resultCategory = await Category.findAll({ where: where });
       return callback(
         CODE_ERROR_STATUS.ERROR,
-        MESSEAGE.GET_LIST_SUCCESFULLY,
+        MESSAGE.GET_LIST_SUCCESSFULLY,
         HTTP_STATUS.OK,
         null,
         resultCategory
@@ -69,7 +69,7 @@ module.exports = {
     } catch (error) {
       return callback(
         CODE_ERROR_STATUS.ERROR,
-        MESSEAGE.GET_LIST_FAILED,
+        MESSAGE.GET_LIST_FAILED,
         HTTP_STATUS.BAD_REQUEST,
         error,
         null
@@ -84,7 +84,7 @@ module.exports = {
       resultCategory = await Category.destroy({ where });
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
-        MESSEAGE.DELETE_SUCCESFULLY,
+        MESSAGE.DELETE_SUCCESSFULLY,
         HTTP_STATUS.OK,
         null,
         where
@@ -92,7 +92,7 @@ module.exports = {
     } catch (error) {
       return callback(
         CODE_ERROR_STATUS.ERROR,
-        MESSEAGE.DELETE_FAILED,
+        MESSAGE.DELETE_FAILED,
         HTTP_STATUS.BAD_REQUEST,
         error,
         null
@@ -117,7 +117,7 @@ module.exports = {
 
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
-        MESSEAGE.UPDATE_SUCCESFULLY,
+        MESSAGE.UPDATE_SUCCESSFULLY,
         HTTP_STATUS.OK,
         null,
         where
@@ -125,7 +125,7 @@ module.exports = {
     } catch (error) {
       return callback(
         CODE_ERROR_STATUS.ERROR,
-        MESSEAGE.UPDATE_FAILED,
+        MESSAGE.UPDATE_FAILED,
         HTTP_STATUS.BAD_REQUEST,
         error,
         null
@@ -139,7 +139,7 @@ module.exports = {
       let resultProductByCategory = await resultCategory.getProducts();
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
-        MESSEAGE.GET_LIST_SUCCESFULLY,
+        MESSAGE.GET_LIST_SUCCESSFULLY,
         HTTP_STATUS.OK,
         null,
         resultProductByCategory
@@ -147,7 +147,7 @@ module.exports = {
     } catch (error) {
       return callback(
         CODE_ERROR_STATUS.ERROR,
-        MESSEAGE.GET_LIST_FAILED,
+        MESSAGE.GET_LIST_FAILED,
         HTTP_STATUS.BAD_REQUEST,
         error,
         null

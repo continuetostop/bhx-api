@@ -2,7 +2,7 @@ const UnitConversion = require('../models/UnitConversionModel');
 const GroupUnit = require('../models/GroupUnitModel');
 const {
   CODE_ERROR_STATUS,
-  MESSEAGE,
+  MESSAGE,
   HTTP_STATUS,
 } = require('../utils/Constant');
 
@@ -20,7 +20,7 @@ module.exports = {
       result = { id: resultGroupUnit.id };
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
-        MESSEAGE.CREATE_SUCCESFULLY,
+        MESSAGE.CREATE_SUCCESSFULLY,
         HTTP_STATUS.CREATED,
         null,
         result
@@ -28,7 +28,7 @@ module.exports = {
     } catch (error) {
       return callback(
         CODE_ERROR_STATUS.ERROR,
-        MESSEAGE.CREATE_FAILED,
+        MESSAGE.CREATE_FAILED,
         HTTP_STATUS.BAD_REQUEST,
         error,
         null
@@ -48,7 +48,7 @@ module.exports = {
       result = { id: resultGroupUnit.id };
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
-        MESSEAGE.UPDATE_SUCCESFULLY,
+        MESSAGE.UPDATE_SUCCESSFULLY,
         HTTP_STATUS.OK,
         null,
         result
@@ -56,7 +56,7 @@ module.exports = {
     } catch (error) {
       return callback(
         CODE_ERROR_STATUS.ERROR,
-        MESSEAGE.UPDATE_FAILED,
+        MESSAGE.UPDATE_FAILED,
         HTTP_STATUS.BAD_REQUEST,
         error,
         null
@@ -74,7 +74,7 @@ module.exports = {
       result = { id: resultGroupUnit.id };
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
-        MESSEAGE.DELETE_SUCCESFULLY,
+        MESSAGE.DELETE_SUCCESSFULLY,
         HTTP_STATUS.OK,
         null,
         result
@@ -82,7 +82,7 @@ module.exports = {
     } catch (error) {
       return callback(
         CODE_ERROR_STATUS.ERROR,
-        MESSEAGE.DELETE_FAILED,
+        MESSAGE.DELETE_FAILED,
         HTTP_STATUS.BAD_REQUEST,
         error,
         null
