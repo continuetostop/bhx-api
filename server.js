@@ -3,7 +3,7 @@ const BodyParser = require('body-parser');
 const MethodOverride = require('method-override');
 const db = require('./app/models/index');
 
-const MySequenlize = require('./app/utils/Sequelize');
+const MySequelize = require('./app/utils/Sequelize');
 
 const port = process.env.PORT || 8080;
 
@@ -34,7 +34,7 @@ app.all('/*', [require('./app/middlewares/AllowCossDomain')]);
 
 app.use(Express.static(__dirname + '/public'));
 // try {
-//   MySequenlize.sync({ force: true }).then(() =>
+//   MySequelize.sync({ force: true }).then(() =>
 //     console.log('Users data have been saved')
 //   );
 // } catch (err) {
@@ -42,7 +42,7 @@ app.use(Express.static(__dirname + '/public'));
 // }
 
 try {
-  MySequenlize.sync({ force: false }).then(() =>
+  MySequelize.sync({ force: false }).then(() =>
     console.log('Users data have been saved')
   );
 } catch (err) {

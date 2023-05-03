@@ -8,6 +8,9 @@ const {
   MESSEAGE,
   HTTP_STATUS,
 } = require('../utils/Constant');
+const {
+  getListUnitConversionByGroupUnit,
+} = require('../handlers/UnitConversionHander');
 
 module.exports = {
   create: async (data, callback) => {
@@ -66,17 +69,57 @@ module.exports = {
       );
     }
   },
+  // getList: async (query, callback) => {
+  //   let where = {};
+  //   try {
+  //     let resultGroupUnit = await GroupUnit.findAll({ where: where });
+
+  //     return callback(
+  //       CODE_ERROR_STATUS.SUCCESS,
+  //       MESSEAGE.GET_LIST_SUCCESFULLY,
+  //       HTTP_STATUS.OK,
+  //       null,
+  //       resultGroupUnit
+  //     );
+  //   } catch (error) {
+  //     return callback(
+  //       CODE_ERROR_STATUS.ERROR,
+  //       MESSEAGE.GET_LIST_FAILED,
+  //       HTTP_STATUS.BAD_REQUEST,
+  //       error,
+  //       null
+  //     );
+  //   }
+  // },
   getList: async (query, callback) => {
     let where = {};
     try {
       let resultGroupUnit = await GroupUnit.findAll({ where: where });
+      let result = await Promise.all(
+        resultGroupUnit.map(async (groupUnit) => {
+          let result = {};
+          result.id = groupUnit.id;
+          result.name = groupUnit.name;
+          result.description = groupUnit.description;
+          result.baseUnitId = groupUnit.baseUnitId;
+          resultGroupUnit = await GroupUnit.findByPk(groupUnit.id);
 
+          let resultListUnitConversionByGroupUnit =
+            await resultGroupUnit.getUnits();
+          result.unit = await Promise.all(
+            getListUnitConversionByGroupUnit(
+              resultListUnitConversionByGroupUnit
+            )
+          );
+          return result;
+        })
+      );
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
         MESSEAGE.GET_LIST_SUCCESFULLY,
         HTTP_STATUS.OK,
         null,
-        resultGroupUnit
+        result
       );
     } catch (error) {
       return callback(
@@ -146,16 +189,21 @@ module.exports = {
   },
   getListUnitConversionByGroupUnit: async (id, callback) => {
     try {
-      let resultListUnitConversionByGroupUnit, resultGroupUnit;
+      let resultListUnitConversionByGroupUnit, resultGroupUnit, result;
       resultGroupUnit = await GroupUnit.findByPk(id);
 
       resultListUnitConversionByGroupUnit = await resultGroupUnit.getUnits();
+
+      result = await Promise.all(
+        getListUnitConversionByGroupUnit(resultListUnitConversionByGroupUnit)
+      );
+
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
         MESSEAGE.GET_LIST_SUCCESFULLY,
         HTTP_STATUS.OK,
         null,
-        resultListUnitConversionByGroupUnit
+        result
       );
     } catch (error) {
       return callback(

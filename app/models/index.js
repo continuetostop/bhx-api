@@ -3,6 +3,7 @@ const Product = require('../models/ProductModel');
 const GroupUnit = require('./GroupUnitModel');
 const Unit = require('./UnitModel');
 const UnitConversion = require('./UnitConversionModel');
+const ProductUnit = require('./ProductUnitModel');
 
 Product.belongsTo(Category, {
   onDelete: 'CASCADE',
@@ -37,4 +38,16 @@ GroupUnit.belongsToMany(Unit, {
   through: 'unit_conversions',
   foreignKey: 'groupUnitId',
   otherKey: 'toUnitId',
+});
+
+Unit.belongsToMany(Product, {
+  through: 'product_units',
+  foreignKey: 'unitId',
+  otherKey: 'productCodeId',
+});
+
+Product.belongsToMany(Unit, {
+  through: 'product_units',
+  foreignKey: 'productCodeId',
+  otherKey: 'unitId',
 });
