@@ -1,3 +1,6 @@
-module.exports={
-  SECRET:"thPd6aj1LO"
-}
+module.exports = {
+  ACCESS_TOKEN_SECRET: 'CHECK',
+  REFRESH_TOKEN_SECRET: 'BUG',
+  ACCESS_TOKEN_EXPIRES_IN: '1d',
+  REFRESH_TOKEN_EXPIRES_IN: '1Y',
+};
