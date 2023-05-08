@@ -69,7 +69,6 @@ module.exports = {
       productInf,
       groupUnitInfo,
       groupUnitInfoDetail,
-      listPriceProduct,
       listPriceProductRaw;
     try {
       productInf = await Product.findByPk(id);
@@ -83,20 +82,8 @@ module.exports = {
         (priceProductRaw) => priceProductRaw['product_units.price'] > 0
       );
 
-      listPriceProduct = await Promise.all(
-        listPriceProductRaw.map((priceProductRaw) => {
-          let result = {};
-          let index = groupUnitInfoDetail.findIndex(
-            (i) => i.id === priceProductRaw['product_units.unitId']
-          );
-          result.productCodeId = priceProductRaw['product_units.productCodeId'];
-          // result.unitId = priceProductRaw['product_units.unitId'];
-          result.price = priceProductRaw['product_units.price'];
-          result.unit = priceProductRaw.name;
-          result.quantity =
-            groupUnitInfoDetail[index]['unit_conversions.multiplier'];
-          return result;
-        })
+      let listPriceProduct = await Promise.all(
+        ProductHandler.getById(listPriceProductRaw, groupUnitInfoDetail)
       );
       let name = productInf.name;
       let description = productInf.description;

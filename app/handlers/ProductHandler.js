@@ -23,4 +23,23 @@ module.exports = {
       return result;
     });
   },
+  getById: (listPriceProductRaw, groupUnitInfoDetail) => {
+    return listPriceProductRaw.map(async (priceProductRaw) => {
+      console.log(
+        '🚀 ~ file: ProductHandler.js:28 ~ listPriceProductRaw.map ~ priceProductRaw:',
+        priceProductRaw
+      );
+      let result = {};
+      let index = groupUnitInfoDetail.findIndex(
+        (i) => i.id === priceProductRaw['product_units.unitId']
+      );
+      result.productCodeId = priceProductRaw['product_units.productCodeId'];
+      // result.unitId = priceProductRaw['product_units.unitId'];
+      result.price = priceProductRaw['product_units.price'];
+      result.unit = priceProductRaw.name;
+      result.quantity =
+        groupUnitInfoDetail[index]['unit_conversions.multiplier'];
+      return result;
+    });
+  },
 };
