@@ -1,6 +1,15 @@
 module.exports = {
   DEFAULT_PAGING_SIZE: 8,
   LIST_ROLES: ['admin', 'moderator', 'user'],
+  CODE_ORDER_STATUS: {
+    PENDING: 0,
+    CONFIRMED: 1,
+    SHIPPED: 2,
+    DELIVERED: 3,
+    CANCELLED: 4,
+    RETURNED: 5,
+    REFUNDED: 6,
+  },
   CODE_ERROR_STATUS: {
     ERROR: 1,
     SUCCESS: 0,

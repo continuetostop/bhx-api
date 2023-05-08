@@ -4,6 +4,8 @@ const GroupUnit = require('./GroupUnitModel');
 const Unit = require('./UnitModel');
 const UnitConversion = require('./UnitConversionModel');
 const ProductUnit = require('./ProductUnitModel');
+const Order = require('./OrderModel');
+const OrderDetail = require('./OrderDetailModel');
 
 Product.belongsTo(Category, {
   onDelete: 'CASCADE',
@@ -50,4 +52,11 @@ Product.belongsToMany(Unit, {
   through: 'product_units',
   foreignKey: 'productCodeId',
   otherKey: 'unitId',
+});
+
+OrderDetail.belongsTo(Order, {
+  onDelete: 'CASCADE',
+});
+Order.hasMany(OrderDetail, {
+  onDelete: 'CASCADE',
 });
