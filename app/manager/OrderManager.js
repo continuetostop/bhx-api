@@ -1,4 +1,4 @@
-const { where } = require('sequelize');
+const Sequelize = require('sequelize');
 const Order = require('../models/OrderModel');
 const User = require('../models/UserModel');
 const {
@@ -7,36 +7,74 @@ const {
   CODE_ERROR_STATUS,
 } = require('../utils/Constant');
 const Product = require('../models/ProductModel');
+const GroupUnit = require('../models/GroupUnitModel');
+const ProductHandler = require('../handlers/ProductHandler');
+const OrderDetail = require('../models/OrderDetailModel');
 
 module.exports = {
   create: async (data, callback) => {
-    console.log('🚀 ~ file: OrderManager.js:12 ~ create: ~ data:', data);
     const user = await User.findByPk(data.payload.id, { raw: true });
 
     const { id, name, address, phone, emal } = user;
     const orderData = { userId: id, name, address, phone, emal };
+    let total = 0;
     try {
-      // const resultOrder = await Order.create(orderData);
-      // const result = resultOrder.id;
-      Promise.all(
-        data.listItems.map((item) => {
-          let dataProduct = {};
-          let resultProduct;
+      const resultOrder = await Order.create(orderData);
+      const result = { id: resultOrder.id };
+      where = { id: resultOrder.id };
+      await Promise.all(
+        data.listItems.map(async (item) => {
+          let dataOrderDetail = {};
+
+          let resultProduct,
+            dataItem,
+            productInf,
+            groupUnitInfo,
+            groupUnitInfoDetail,
+            listPriceProductRaw;
           if (typeof item == 'object') {
             dataItem = { ...item };
-            console.log(
-              '🚀 ~ file: OrderManager.js:27 ~ data.listItems.map ~ dataItem:',
-              dataItem
-            );
           } else {
             dataItem = { ...JSON.parse(item) };
-            resultProduct = Product.console.log(
-              '🚀 ~ file: OrderManager.js:28 ~ data.listItems.map ~ dataItem:',
-              dataItem
-            );
           }
+          dataOrderDetail.productId = dataItem.productId;
+          dataOrderDetail.productCodeId = dataItem.productCodeId;
+          dataOrderDetail.qty = dataItem.qty;
+
+          productInf = await Product.findByPk(dataItem.productId);
+
+          dataOrderDetail.name = productInf.name;
+          dataOrderDetail.image = productInf.image;
+
+          groupUnitInfo = await GroupUnit.findByPk(productInf.groupUnitId);
+          groupUnitInfoDetail = await groupUnitInfo.getUnits({ raw: true });
+
+          listPriceProductRaw = await productInf.getUnits({ raw: true });
+
+          // remove price < 0
+          listPriceProductRaw = listPriceProductRaw.filter(
+            (priceProductRaw) => priceProductRaw['product_units.price'] > 0
+          );
+
+          let listPriceProduct = await Promise.all(
+            ProductHandler.getById(listPriceProductRaw, groupUnitInfoDetail)
+          );
+          const index = listPriceProduct.findIndex(
+            (priceProduct) =>
+              priceProduct.productCodeId === dataItem.productCodeId
+          );
+
+          dataOrderDetail.price = listPriceProduct[index].price;
+          dataOrderDetail.subtotal =
+            dataOrderDetail.price * dataOrderDetail.qty;
+          total = total + dataOrderDetail.subtotal;
+
+          let resultOrderDetail = await OrderDetail.create(dataOrderDetail);
+          resultOrder.addOrder_details([resultOrderDetail.id]);
         })
       );
+
+      await Order.update({ total: total }, { where });
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
         MESSAGE.CREATE_SUCCESSFULLY,
@@ -45,7 +83,6 @@ module.exports = {
         result
       );
     } catch (error) {
-      console.log('🚀 ~ file: OrderManager.js:37 ~ create: ~ error:', error);
       return callback(
         CODE_ERROR_STATUS.ERROR,
         MESSAGE.CREATE_FAILED,
@@ -58,7 +95,10 @@ module.exports = {
   getById: async (id, data, callback) => {
     const where = { id, userId: data.payload.id };
     try {
-      const resultOrder = await Order.findOne({ where, raw: true });
+      const resultOrder = await Order.findOne({
+        include: OrderDetail,
+        where,
+      });
 
       return callback(
         CODE_ERROR_STATUS.SUCCESS,
@@ -80,11 +120,12 @@ module.exports = {
   getList: async (query, data, callback) => {
     const where = { userId: data.payload.id };
     try {
-      const resultOrder = await Order.findAll({ where, raw: true });
-      // console.log(
-      //   '🚀 ~ file: OrderManager.js:46 ~ getList: ~ resultOrder:',
-      //   resultOrder
-      // );
+      const resultOrder = await Order.findAll({
+        include: {
+          model: OrderDetail,
+        },
+        where,
+      });
 
       return callback(
         CODE_ERROR_STATUS.SUCCESS,

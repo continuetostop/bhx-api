@@ -25,10 +25,6 @@ module.exports = {
   },
   getById: (listPriceProductRaw, groupUnitInfoDetail) => {
     return listPriceProductRaw.map(async (priceProductRaw) => {
-      console.log(
-        '🚀 ~ file: ProductHandler.js:28 ~ listPriceProductRaw.map ~ priceProductRaw:',
-        priceProductRaw
-      );
       let result = {};
       let index = groupUnitInfoDetail.findIndex(
         (i) => i.id === priceProductRaw['product_units.unitId']
