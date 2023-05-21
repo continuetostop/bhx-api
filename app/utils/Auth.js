@@ -1,7 +1,7 @@
 const Bcrypt = require('bcrypt');
 const JWT = require('jsonwebtoken');
 const configAuth = require('../config/Auth');
-const { reject } = require('lodash');
+
 module.exports = {
   hashPassword: async (password) => {
     const salt = await Bcrypt.genSalt(10);

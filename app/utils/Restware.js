@@ -3,15 +3,20 @@ const sendRespone = (res, code, message, httpCode, errors, data) => {
     return;
   }
 
+  let status = httpCode;
+  res.status(status);
+  res.contentType('json');
+
+  if (process.env.NODE_ENV === 'production') {
+    return res.json(data);
+  }
+
   let out = {};
   out.code = code;
   out.message = message;
   out.data = data;
   out.errors = errors;
 
-  let status = httpCode;
-  res.status(status);
-  res.contentType('json');
   return res.json(out);
 };
 

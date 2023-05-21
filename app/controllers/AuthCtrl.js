@@ -1,5 +1,5 @@
 const AuthManager = require('../manager/AuthManager');
-const { verifyAccessToken } = require('../utils/Auth');
+// const { verifyAccessToken } = require('../utils/Auth');
 const Rest = require('../utils/Restware');
 
 module.exports = {

@@ -6,4 +6,5 @@ module.exports = function (app) {
   app.get('/api/v1/auth/login', authCtrl.login);
   app.delete('/api/v1/auth/logout', authCtrl.logout);
   app.get('/api/v1/auth/check', verifyAccessToken, authCtrl.check);
+  app.get('/api/v1/auth/check', authCtrl.check);
 };
