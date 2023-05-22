@@ -7,9 +7,9 @@ const sendRespone = (res, code, message, httpCode, errors, data) => {
   res.status(status);
   res.contentType('json');
 
-  if (process.env.NODE_ENV === 'production') {
-    return res.json(data);
-  }
+  // if (process.env.NODE_ENV === 'production') {
+  //   return res.json(data);
+  // }
 
   let out = {};
   out.code = code;
